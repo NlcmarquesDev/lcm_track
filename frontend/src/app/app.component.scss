@@ -1,0 +1,34 @@
+@use "variables" as *;
+
+.container {
+  margin: 30px;
+}
+.container {
+  &_header {
+    padding: 30px;
+    background-color: $bg-header;
+    width: 100%;
+
+    h2 {
+      margin: 20px 0;
+    }
+  }
+
+  &_table {
+    padding: 30px;
+    background-color: $bg;
+    width: 100%;
+  }
+}
+
+.container-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px; /* espaçamento entre itens, opcional */
+  &_current {
+    display: flex;
+    flex-wrap: wrap; /* permite quebra de linha */
+    gap: 10px; /* espaçamento entre itens, opcional */
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,8 @@
+<div class="cards-content">
+  <p class="cards-content_title">{{title}}</p>
+  <p class="cards-content_budget">&euro; {{total}}</p>
+  <div class="cards-content_saved">
+    <p class="cards-content_saved_label">{{description}}</p>
+    <p class="cards-content_saved_value" *ngIf="saved !== undefined && saved !== null">&euro; {{saved}}</p>
+  </div>
+</div>

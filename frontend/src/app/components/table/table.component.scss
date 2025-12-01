@@ -1,0 +1,75 @@
+@use "variables" as *;
+
+.continer-table {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: $font-main;
+  border: 1px solid $border;
+  background-color: $bg;
+  border-radius: 10px;
+  overflow: hidden;
+}
+thead th {
+  color: $color-text;
+  padding: 8px;
+}
+
+thead tr:nth-child(2) {
+  background-color: $bg !important;
+}
+table tr {
+  background-color: $bg-header !important;
+}
+tbody td,
+.table th {
+  padding: 20px;
+  text-align: right;
+  border-spacing: 0;
+  overflow: hidden;
+}
+tbody td,
+thead th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); // mais suave
+}
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table {
+  &_title,
+  th:first-child {
+    text-align: left !important;
+  }
+}
+
+tfoot td {
+  padding: 8px;
+  font-weight: bold;
+}
+.day {
+  background-color: #374254;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: $color-text;
+}
+.spend {
+  color: $color-text;
+}
+.difference {
+  background-color: #1b393b;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #00d66f;
+}
+.remain {
+  background-color: #4a2a39;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #802a38;
+  color: #ffa3a3;
+}

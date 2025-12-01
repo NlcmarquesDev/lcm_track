@@ -1,0 +1,123 @@
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.navbar {
+  position: fixed; // Fixa no ecrã
+  bottom: 0; // No fundo
+  left: 50%; // Centraliza horizontalmente
+  transform: translateX(-50%); // Ajuste para centralização
+  width: 90%; // Largura da barra
+  max-width: 600px; // Limita largura em desktop
+  background-color: rgba(76, 76, 76, 0.36);
+  color: #f5f5f5;
+  padding: 10px 0;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 5rem;
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+
+  &:after {
+    content: "";
+    width: 120px;
+    background: #d9e0ea;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    height: 3px;
+    transform: translatex(-50%);
+    opacity: 0.7;
+  }
+
+  &__item {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+
+    &::before,
+    &:after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: currentColor;
+      border-radius: 50%;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: all 0.55s cubic-bezier(0.71, 0.03, 0.23, 0.95);
+    }
+
+    &::after {
+      box-shadow: 0 7px 15px currentColor;
+    }
+
+    &.-blue {
+      color: #06b8ff;
+    }
+
+    &.-orange {
+      color: #f2704d;
+    }
+
+    &.-navy-blue {
+      color: #405fff;
+    }
+
+    &.-yellow {
+      color: #f8cd4b;
+    }
+
+    &.-purple {
+      color: #8444d6;
+    }
+
+    &:hover {
+      &::before,
+      &::after {
+        transform: translateY(-60px) scale(1.1);
+      }
+      &::before {
+        opacity: 1;
+      }
+      &::after {
+        opacity: 0.4;
+      }
+      .navbar__icon {
+        transform: translateY(-58px) scale(1.25);
+        color: #fff;
+        transition-delay: 0.1s, 0.1s;
+      }
+    }
+  }
+
+  &__icon {
+    transition: all 0.5s cubic-bezier(0.71, 0.03, 0.23, 0.95);
+    transition-delay: 0.1s;
+    display: inline-block;
+    position: relative;
+    z-index: 2;
+  }
+}
