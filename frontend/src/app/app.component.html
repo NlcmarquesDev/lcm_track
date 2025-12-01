@@ -10,4 +10,35 @@
 <section class="container_table">
   <app-table></app-table>
 </section>
-<app-header></app-header>
+<app-header (openModal)="openModal($event)"></app-header>
+<app-bottom-modal [isOpen]="isModalOpen" (closeModal)="closeModal()">
+  <ng-container [ngSwitch]="modalType">
+
+    <!-- Modal de adicionar input -->
+    <div *ngSwitchCase="'add'">
+      <h3>Adicionar entrada</h3>
+      <input type="text" placeholder="Descrição">
+      <input type="number" placeholder="Valor">
+      <button>Guardar</button>
+    </div>
+
+    <!-- Modal de definições -->
+    <div *ngSwitchCase="'settings'">
+      <h3>Definições</h3>
+      <p>Aqui podes alterar config...</p>
+    </div>
+
+    <!-- Modal de definições -->
+    <div *ngSwitchCase="'open-rapports'">
+      <h3>Rapports</h3>
+      <p>Aqui podes abrir os rapports...</p>
+    </div>
+
+    <!-- Modal de fechar mês -->
+    <div *ngSwitchCase="'close-month'">
+      <h3>Fechar mês</h3>
+      <button>Confirmar</button>
+    </div>
+
+  </ng-container>
+</app-bottom-modal>

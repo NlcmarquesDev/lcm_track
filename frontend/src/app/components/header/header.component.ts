@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,20 +7,26 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  addRegister() {
-    console.log('add new register');
+  @Output() openModal = new EventEmitter<string>();
+
+  open(type: string) {
+    this.openModal.emit(type);
   }
-  addNewMonth() {
-    //este click vai estar dentro do fechamento do mes
-    console.log('add new month ');
-  }
-  closeMonth() {
-    console.log('close the month');
-  }
-  openSettings() {
-    console.log('open settings');
-  }
-  openRapports() {
-    console.log('open Rapports');
-  }
+
+  // addRegister() {
+  //   console.log('add new register');
+  // }
+  // addNewMonth() {
+  //   //este click vai estar dentro do fechamento do mes
+  //   console.log('add new month ');
+  // }
+  // closeMonth() {
+  //   console.log('close the month');
+  // }
+  // openSettings() {
+  //   console.log('open settings');
+  // }
+  // openRapports() {
+  //   console.log('open Rapports');
+  // }
 }

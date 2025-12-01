@@ -1,27 +1,27 @@
 <div class="wrapper">
   <div class="navbar">
-    <div class="navbar__item -blue" (click)="openSettings()">
+    <div class="navbar__item -blue" (click)="open('settings')">
       <span class=" navbar__icon">
         <svg class="icon">
           <use xlink:href="#icon-home"></use>
         </svg>
       </span>
     </div>
-    <div class="navbar__item -orange" (click)="openRapports()">
+    <div class="navbar__item -orange" (click)="open('open-rapports')">
       <span class="navbar__icon">
         <svg class="icon">
           <use xlink:href="#icon-cup"></use>
         </svg>
       </span>
     </div>
-    <div class="navbar__item -navy-blue" (click)="addRegister()">
+    <div class="navbar__item -navy-blue" (click)="open('add')">
       <span class="navbar__icon">
         <svg class="icon">
           <use xlink:href="#icon-plus"></use>
         </svg>
       </span>
     </div>
-    <div class="navbar__item -purple" (click)="closeMonth()">
+    <div class="navbar__item -purple" (click)="open('close-month')">
       <span class="navbar__icon">
         <svg class="icon">
           <use xlink:href="#icon-user"></use>

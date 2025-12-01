@@ -1,0 +1,9 @@
+@if (isOpen) {
+<div class="backdrop" *ngIf="isOpen" (click)="close()"></div>
+}
+<div class="bottom-modal" [class.open]="isOpen">
+  <div class="handle"></div>
+
+  <!-- Conteúdo dinâmico -->
+  <ng-content></ng-content>
+</div>
