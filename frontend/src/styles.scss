@@ -53,3 +53,13 @@ body {
 .btn-danger {
   @include btn-base($danger);
 }
+
+.positive {
+  color: $success;
+  font-weight: bold;
+}
+
+.negative {
+  color: $danger;
+  font-weight: bold;
+}

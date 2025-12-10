@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DayRecord } from '../../model/dayRecord.type';
 
@@ -9,6 +9,8 @@ import { DayRecord } from '../../model/dayRecord.type';
   styleUrl: './table.component.scss',
 })
 export class TableComponent {
+  actualMonth = signal('November 2024');
+
   monthRecords: Array<DayRecord> = [
     { id: 1, day: 1, total: 100, difference: 0, rest: 100 },
     { id: 2, day: 2, total: 150, difference: 50, rest: 50 },

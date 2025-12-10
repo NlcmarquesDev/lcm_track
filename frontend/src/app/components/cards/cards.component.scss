@@ -3,7 +3,7 @@
 .cards-content {
   flex: 1 1 calc(50% - 20px); /* ocupa metade do container menos o gap */
   box-sizing: border-box;
-  background: $bg-second;
+  background: $inside-card;
   padding: 20px;
   border-radius: 16px;
   border: 1px solid $border;

@@ -17,30 +17,15 @@
   <ng-container [ngSwitch]="modalType">
 
     <!-- Modal de adicionar input -->
-    <div *ngSwitchCase="'add'">
-      <h3>Adicionar entrada</h3>
-      <input type="text" placeholder="Descrição">
-      <input type="number" placeholder="Valor">
-      <button>Guardar</button>
-    </div>
+    <app-modal-add-record *ngSwitchCase="'add'" />
+    <!-- Modal de definições -->
+    <app-modal-settings *ngSwitchCase="'settings'"></app-modal-settings>
 
     <!-- Modal de definições -->
-    <div *ngSwitchCase="'settings'">
-      <h3>Definições</h3>
-      <p>Aqui podes alterar config...</p>
-    </div>
-
-    <!-- Modal de definições -->
-    <div *ngSwitchCase="'open-rapports'">
-      <h3>Rapports</h3>
-      <p>Aqui podes abrir os rapports...</p>
-    </div>
+    <app-modal-rapports *ngSwitchCase="'open-rapports'"></app-modal-rapports>
 
     <!-- Modal de fechar mês -->
-    <div *ngSwitchCase="'close-month'">
-      <h3>Fechar mês</h3>
-      <button>Confirmar</button>
-    </div>
+    <app-modal-close-month *ngSwitchCase="'close-month'"></app-modal-close-month>
 
   </ng-container>
 </app-bottom-modal>

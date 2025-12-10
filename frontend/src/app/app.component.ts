@@ -6,6 +6,10 @@ import { TableComponent } from './components/table/table.component';
 import { CommonModule } from '@angular/common';
 import { BottomModalComponent } from './components/bottom-modal/bottom-modal.component';
 import { Card } from './model/card.type';
+import { ModalAddRecordComponent } from './components/modal-add-record/modal-add-record.component';
+import { ModalSettingsComponent } from './components/modal-settings/modal-settings.component';
+import { ModalRapportsComponent } from './components/modal-rapports/modal-rapports.component';
+import { ModalCloseMonthComponent } from './components/modal-close-month/modal-close-month.component';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +19,10 @@ import { Card } from './model/card.type';
     TableComponent,
     CommonModule,
     BottomModalComponent,
+    ModalAddRecordComponent,
+    ModalSettingsComponent,
+    ModalRapportsComponent,
+    ModalCloseMonthComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

@@ -3,6 +3,9 @@
   <p class="cards-content_budget">&euro; {{total}}</p>
   <div class="cards-content_saved">
     <p class="cards-content_saved_label">{{description}}</p>
-    <p class="cards-content_saved_value" *ngIf="saved !== undefined && saved !== null">&euro; {{saved}}</p>
+    <p class="cards-content_saved_value" *ngIf="saved !== undefined && saved !== null" [ngClass]="{
+        'positive': saved >= 0,
+        'negative': saved < 0
+      }">&euro; {{saved}}</p>
   </div>
 </div>

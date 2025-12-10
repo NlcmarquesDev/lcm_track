@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-modal-add-record',
+  imports: [],
+  templateUrl: './modal-add-record.component.html',
+  styleUrl: './modal-add-record.component.scss'
+})
+export class ModalAddRecordComponent {
+
+}
