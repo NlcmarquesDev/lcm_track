@@ -1,0 +1,10 @@
+<div class="cards-content">
+  <p class="cards-content_title">{{title()}}</p>
+  <p class="cards-content_budget" [ngClass]="{
+      'positive': total() >= 0 && isCumultative(),
+      'negative': total()  < 0 && isCumultative()
+   }">&euro; {{total()}}</p>
+  <div class="cards-content_saved">
+    <p class="cards-content_saved_label">{{description()}}</p>
+  </div>
+</div>

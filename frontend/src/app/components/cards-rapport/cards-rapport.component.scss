@@ -1,0 +1,40 @@
+@use "variables" as *;
+
+.cards-content {
+  flex: 1 1 calc(50% - 20px); /* ocupa metade do container menos o gap */
+  box-sizing: border-box;
+  background: $inside-card;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid $border;
+
+  &_title {
+    color: $text-cards;
+    padding-bottom: 5px;
+    padding-top: 2px;
+    font-size: 14px;
+  }
+  &_saved {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    color: $text-cards;
+  }
+  &_budget {
+    font-size: 26px;
+    padding: 10px 0;
+  }
+}
+.cards-content_current {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 10px 0px;
+  background-color: $bg-second;
+  border: 1px solid $border;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+}

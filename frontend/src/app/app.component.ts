@@ -10,6 +10,7 @@ import { ModalAddRecordComponent } from './components/modal-add-record/modal-add
 import { ModalSettingsComponent } from './components/modal-settings/modal-settings.component';
 import { ModalRapportsComponent } from './components/modal-rapports/modal-rapports.component';
 import { ModalCloseMonthComponent } from './components/modal-close-month/modal-close-month.component';
+import { CardsRapportComponent } from './components/cards-rapport/cards-rapport.component';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { ModalCloseMonthComponent } from './components/modal-close-month/modal-c
     ModalSettingsComponent,
     ModalRapportsComponent,
     ModalCloseMonthComponent,
+    CardsRapportComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

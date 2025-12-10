@@ -68,12 +68,21 @@ tfoot td {
   padding: 8px 12px;
   border-radius: 10px;
 }
+.positive-total {
+  background-color: #1b393b;
+  border: 1px solid #107045;
+  color: #00d66f;
+}
 .positive {
   background-color: #1b393b;
   color: #00d66f;
 }
-.negative {
+.negative-total {
   background-color: #4a2a39;
   border: 1px solid #802a38;
+  color: #ffa3a3;
+}
+.negative {
+  background-color: #4a2a39;
   color: #ffa3a3;
 }

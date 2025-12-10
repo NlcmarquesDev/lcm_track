@@ -24,8 +24,8 @@
         </span>
       </td>
       <td> <span class="remain" [ngClass]="{
-        'positive': dayrecord.rest >= 0,
-        'negative': dayrecord.rest < 0}"> &euro; {{dayrecord.rest}}</span></td>
+        'positive-total': dayrecord.rest >= 0,
+        'negative-total': dayrecord.rest < 0}"> &euro; {{dayrecord.rest}}</span></td>
     </tr>
     }
   </tbody>

@@ -1,12 +1,13 @@
 <section class="container_header">
-  <h2>Lcm Track</h2>
+  <h2>LCM Track</h2>
   <div class="container-cards">
     @for (item of cardItems; track item.id) {
     <app-cards [title]="item.description" [total]="item.totalValue" description="Saldo"
       [saved]="item.saved"></app-cards>
     }
-    <app-cards title="Total Gasto" [total]="943" description="Novembro 2024"></app-cards>
-    <app-cards title="Saldo Atual" [total]="57" description="Cumulativo"></app-cards>
+    <app-cards-rapport title="Total Gasto" [total]="943" description="Novembro 2024" />
+    <app-cards-rapport title="Saldo Atual" [total]="57" description="Cumulativo" [isCumultative]="true" />
+
   </div>
 </section>
 <section class="container_table">
