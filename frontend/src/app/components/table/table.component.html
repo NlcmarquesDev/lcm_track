@@ -11,73 +11,23 @@
     </tr>
   </thead>
   <tbody>
+    @for (dayrecord of monthRecords; track dayrecord.id) {
     <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
+      <td class="table_title"> <span class="day">{{dayrecord.day}}</span></td>
+      <td class="spend"> &euro; {{dayrecord.total}}</td>
+      <td>
+        <span class="difference" [ngClass]="{
+        'positive': dayrecord.difference >= 0,
+        'negative': dayrecord.difference < 0
+      }">
+          € {{ dayrecord.difference }}
+        </span>
+      </td>
+      <td> <span class="remain" [ngClass]="{
+        'positive': dayrecord.rest >= 0,
+        'negative': dayrecord.rest < 0}"> &euro; {{dayrecord.rest}}</span></td>
     </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-    <tr>
-      <td class="table_title"> <span class="day">1</span></td>
-      <td class="spend"> &euro; 85</td>
-      <td> <span class="difference"> + &euro; 15 </span></td>
-      <td> <span class="remain"> &euro; 15</span></td>
-    </tr>
-
+    }
   </tbody>
   <tfoot></tfoot>
 </table>

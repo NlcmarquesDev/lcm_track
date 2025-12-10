@@ -12,21 +12,4 @@ export class HeaderComponent {
   open(type: string) {
     this.openModal.emit(type);
   }
-
-  // addRegister() {
-  //   console.log('add new register');
-  // }
-  // addNewMonth() {
-  //   //este click vai estar dentro do fechamento do mes
-  //   console.log('add new month ');
-  // }
-  // closeMonth() {
-  //   console.log('close the month');
-  // }
-  // openSettings() {
-  //   console.log('open settings');
-  // }
-  // openRapports() {
-  //   console.log('open Rapports');
-  // }
 }

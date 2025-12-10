@@ -5,6 +5,7 @@ import { CardsComponent } from './components/cards/cards.component';
 import { TableComponent } from './components/table/table.component';
 import { CommonModule } from '@angular/common';
 import { BottomModalComponent } from './components/bottom-modal/bottom-modal.component';
+import { Card } from './model/card.type';
 
 @Component({
   selector: 'app-root',
@@ -31,4 +32,9 @@ export class AppComponent {
   closeModal() {
     this.isModalOpen = false;
   }
+
+  cardItems: Array<Card> = [
+    { id: 1, description: 'November 2024', totalValue: 2500, saved: 500 },
+    { id: 2, description: 'December 2024', totalValue: 3000, saved: 800 },
+  ];
 }

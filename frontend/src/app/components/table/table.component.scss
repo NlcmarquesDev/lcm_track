@@ -61,15 +61,19 @@ tfoot td {
   color: $color-text;
 }
 .difference {
-  background-color: #1b393b;
   padding: 8px 12px;
   border-radius: 10px;
-  color: #00d66f;
 }
 .remain {
-  background-color: #4a2a39;
   padding: 8px 12px;
   border-radius: 10px;
+}
+.positive {
+  background-color: #1b393b;
+  color: #00d66f;
+}
+.negative {
+  background-color: #4a2a39;
   border: 1px solid #802a38;
   color: #ffa3a3;
 }
