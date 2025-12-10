@@ -1,9 +1,39 @@
 <div class="modal-container">
-
   <div class="modal-header">
     <h3 class="modal-title">Fechar Mês </h3>
   </div>
   <div class="modal-body">
-
+    <div class="card-resume">
+      <h5>Resumo do Mês Atual</h5>
+      <div class="card-resume_item">
+        <span>Mês</span>
+        <span class="card-resume_item_span">Novembro 2024</span>
+      </div>
+      <div class="card-resume_item">
+        <span>Total Gasto</span>
+        <span class="card-resume_item_span">&euro;1042</span>
+      </div>
+      <div class="card-resume_item">
+        <span>Saldo Final</span>
+        <span class="positive">&euro; 54</span>
+      </div>
+    </div>
+    <div class="card-warning">
+      <span><i class="fa-solid fa-circle-exclamation fa-lg" style="color: #FFD43B;"></i></span>
+      <p>
+        Ao fechar este mês, os dados serão guardados e não poderão ser editados.
+      </p>
+    </div>
+    <div class="card-input">
+      <div class="card-input_header">
+        <span><i class="fa-regular fa-calendar"></i></span>
+        <h4>Nome do Novo Mês</h4>
+      </div>
+      <input type="text" placeholder="ex: Dezembro 2026">
+    </div>
+    <div class="card-btns">
+      <button class="btn" (click)="onCancel()">Cancelar</button>
+      <button class="btn btn-primary">Fechar & Criar Novo</button>
+    </div>
   </div>
 </div>

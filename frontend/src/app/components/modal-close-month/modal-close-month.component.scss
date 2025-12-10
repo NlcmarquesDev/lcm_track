@@ -4,7 +4,7 @@
   margin: 20px;
   border: 2px solid $border;
   background-color: $bg-second;
-  border-radius: 8px;
+  border-radius: 18px;
   padding: 20px;
 }
 
@@ -16,83 +16,90 @@
 .modal-body {
   display: flex;
   flex-direction: column;
+  gap: 25px;
+  margin-top: 30px;
+}
+.card-resume {
+  display: flex;
+  flex-direction: column;
   gap: 15px;
-}
-.container-rapport {
-  padding: 10px;
+  padding: 18px;
   border: 2px solid $border;
-  border-radius: 8px;
+  border-radius: 18px;
   background-color: $inside-card;
-}
 
-.container-rapport-live {
-  padding: 10px;
-  border: 2px solid #183999;
-  border-radius: 8px;
-  background-color: #1e2c4a;
+  h5 {
+    font-family: $font-main;
+    color: $color-text;
+    margin-bottom: 10px;
+  }
+
+  &_item {
+    display: flex;
+    justify-content: space-between;
+    font-family: $font-main;
+    color: $color-text-cards;
+  }
+  &_item_span {
+    color: white;
+  }
 }
 
 .positive {
   font-weight: bold;
 }
-.positive-bar {
-  background-color: $success;
-}
-.negative-bar {
-  background-color: $danger;
-}
 
 .negative {
   font-weight: bold;
 }
-table {
-  width: 100%;
-  border-collapse: separate;
-}
-th,
-td {
-  text-align: left;
-}
 
-.rapport {
-  &__header {
+.card-warning {
+  display: flex;
+  gap: 10px;
+  border: 2px solid $warning-border;
+  border-radius: 18px;
+  padding: 20px;
+  background-color: $warning-bg;
+  color: yellow;
+  line-height: 1.5;
+}
+.card-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &_header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+
+    h4 {
+      font-family: $font-main;
+      color: $gray-text;
+      font-weight: 500;
+    }
+  }
+
+  label {
     font-family: $font-main;
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  &__status {
-    color: #4fa1ff;
-    font-size: small;
-  }
-  &__rapport {
-    margin-top: 15px;
+    color: $color-text;
   }
 
-  &__rapport th {
-    font-size: 13px;
-    font-weight: 400;
-    color: $text-cards;
-    padding-bottom: 8px;
-  }
-  &_statusBar {
-    margin-top: 15px;
-    width: 100%;
-    height: 8px;
-    border-radius: 15px;
-    overflow: hidden;
-    display: flex;
-    &__filled {
-      height: 100%;
-      transition: width 0.5s ease-in-out;
-    }
-    &__empty {
-      height: 100%;
-      background: $text-cards;
-      flex-grow: 1;
+  input {
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid $border;
+    background-color: $bg;
+    color: $color-text-cards;
+    font-family: $font-main;
+    font-size: 16px;
+
+    &::placeholder {
+      color: $text-cards;
     }
   }
+}
+.card-btns {
+  display: flex;
+  gap: 20px;
 }

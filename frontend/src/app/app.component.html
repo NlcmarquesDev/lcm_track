@@ -25,7 +25,7 @@
     <app-modal-rapports *ngSwitchCase="'open-rapports'"></app-modal-rapports>
 
     <!-- Modal de fechar mês -->
-    <app-modal-close-month *ngSwitchCase="'close-month'"></app-modal-close-month>
+    <app-modal-close-month *ngSwitchCase="'close-month'" (cancel)="closeModal()"></app-modal-close-month>
 
   </ng-container>
 </app-bottom-modal>

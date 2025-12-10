@@ -63,3 +63,26 @@ body {
   color: $danger;
   //font-weight: bold;
 }
+
+.btn {
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 16px;
+  font-size: large;
+  color: $gray-text;
+  background-color: $bg-second;
+  border: 2px solid $border;
+  width: 50%;
+  &:hover {
+    background-color: $border;
+  }
+}
+
+.btn-primary {
+  background-color: $primary;
+  color: white;
+  border: none;
+  &:hover {
+    background-color: darken($primary, 10%);
+  }
+}
