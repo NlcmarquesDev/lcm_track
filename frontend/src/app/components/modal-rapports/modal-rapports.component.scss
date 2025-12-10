@@ -32,10 +32,9 @@
   background-color: #1e2c4a;
 }
 
-// .positive {
-//   color: $success;
-//   font-weight: bold;
-// }
+.positive {
+  font-weight: bold;
+}
 .positive-bar {
   background-color: $success;
 }
@@ -44,7 +43,6 @@
 }
 
 .negative {
-  color: $danger;
   font-weight: bold;
 }
 table {
