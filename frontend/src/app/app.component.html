@@ -17,9 +17,9 @@
   <ng-container [ngSwitch]="modalType">
 
     <!-- Modal de adicionar input -->
-    <app-modal-add-record *ngSwitchCase="'add'" />
+    <app-modal-add-record *ngSwitchCase="'add'" (cancel)="closeModal()" />
     <!-- Modal de definições -->
-    <app-modal-settings *ngSwitchCase="'settings'"></app-modal-settings>
+    <app-modal-settings *ngSwitchCase="'settings'" (cancel)="closeModal()"></app-modal-settings>
 
     <!-- Modal de definições -->
     <app-modal-rapports *ngSwitchCase="'open-rapports'"></app-modal-rapports>

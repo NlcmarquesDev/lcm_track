@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 30px;
 }
 .container-rapport {
   padding: 10px;
@@ -35,64 +36,64 @@
 .positive {
   font-weight: bold;
 }
-.positive-bar {
-  background-color: $success;
-}
-.negative-bar {
-  background-color: $danger;
-}
 
 .negative {
   font-weight: bold;
 }
-table {
-  width: 100%;
-  border-collapse: separate;
-}
-th,
-td {
-  text-align: left;
-}
 
-.rapport {
-  &__header {
+.card-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &_header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-family: $font-main;
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 18px;
+    gap: 10px;
+    margin-bottom: 8px;
+
+    h4 {
+      font-family: $font-main;
+      color: $color-text-cards;
+      font-weight: 500;
+    }
+    i {
+      color: $primary;
+    }
   }
-  &__status {
-    color: #4fa1ff;
-    font-size: small;
-  }
-  &__rapport {
-    margin-top: 15px;
+  &_small {
+    color: $small-text;
   }
 
-  &__rapport th {
-    font-size: 13px;
-    font-weight: 400;
-    color: $text-cards;
-    padding-bottom: 8px;
+  label {
+    font-family: $font-main;
+    color: $color-text;
   }
-  &_statusBar {
-    margin-top: 15px;
-    width: 100%;
-    height: 8px;
-    border-radius: 15px;
-    overflow: hidden;
-    display: flex;
-    &__filled {
-      height: 100%;
-      transition: width 0.5s ease-in-out;
-    }
-    &__empty {
-      height: 100%;
-      background: $text-cards;
-      flex-grow: 1;
+
+  input {
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid $border;
+    background-color: $bg;
+    color: $color-text-cards;
+    font-family: $font-main;
+    font-size: 16px;
+
+    &::placeholder {
+      color: $text-cards;
     }
   }
+  select {
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid $border;
+    background-color: $bg;
+    color: $color-text-cards;
+    font-family: $font-main;
+    font-size: 16px;
+  }
+}
+.card-btns {
+  display: flex;
+  gap: 20px;
 }

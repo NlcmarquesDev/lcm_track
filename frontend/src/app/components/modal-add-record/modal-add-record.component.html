@@ -4,6 +4,29 @@
     <h3 class="modal-title">Adicionar Gasto</h3>
   </div>
   <div class="modal-body">
-
+    <div class="card-input">
+      <div class="card-input_header">
+        <i class="fa-regular fa-calendar fa-lg"></i>
+        <h4>Dia do Mês</h4>
+      </div>
+      <input type="number" id="input-euro" placeholder="1 - 31" required>
+    </div>
+    <div class="card-input">
+      <div class="card-input_header">
+        <i class="fa-solid fa-euro-sign fa-lg"></i>
+        <h4>Valor Gasto</h4>
+      </div>
+      <input type="number" placeholder="ex: 10.00" required>
+    </div>
+    <div class="card-info">
+      <small>Informação</small>
+      <p>
+        Preencha os campos para adicionar o gasto.
+      </p>
+    </div>
+    <div class="card-btns">
+      <button class="btn" (click)="onCancel()">Cancelar</button>
+      <button class="btn btn-primary">Adicionar</button>
+    </div>
   </div>
 </div>

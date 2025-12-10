@@ -30,7 +30,7 @@
 
   h5 {
     font-family: $font-main;
-    color: $color-text;
+    color: $color-text-cards;
     margin-bottom: 10px;
   }
 
@@ -70,6 +70,7 @@
 
   &_header {
     display: flex;
+    align-items: center;
     gap: 10px;
     margin-bottom: 8px;
 
@@ -77,6 +78,9 @@
       font-family: $font-main;
       color: $gray-text;
       font-weight: 500;
+    }
+    i {
+      color: $primary;
     }
   }
 
