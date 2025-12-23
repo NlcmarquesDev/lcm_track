@@ -4,7 +4,7 @@
   flex: 1 1 calc(50% - 20px); /* ocupa metade do container menos o gap */
   box-sizing: border-box;
   background: $inside-card;
-  padding: 20px;
+  padding: 15px;
   border-radius: 16px;
   border: 1px solid $border;
 
@@ -12,18 +12,18 @@
     color: $text-cards;
     padding-bottom: 5px;
     padding-top: 2px;
-    font-size: 14px;
+    font-size: 13px;
   }
   &_saved {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 13px;
     padding-top: 5px;
     padding-bottom: 3px;
     color: $text-cards;
   }
   &_budget {
-    font-size: 26px;
+    font-size: 20px;
     padding: 10px 0;
   }
 }

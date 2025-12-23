@@ -3,7 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Month;
+use App\Models\Months;
+use App\Models\UserSettings;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,8 +48,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function months()
+   public function settings()
+    {
+        return $this->hasOne(UserSettings::class);
+    }
+
+    public function Months()
     {
         return $this->hasMany(Months::class);
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(DailyExpense::class);
     }
 }

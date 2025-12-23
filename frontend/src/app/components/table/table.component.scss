@@ -13,6 +13,7 @@ table {
   background-color: $bg;
   border-radius: 10px;
   overflow: hidden;
+  font-size: 13px;
 }
 thead th {
   color: $color-text;
@@ -27,7 +28,7 @@ table tr {
 }
 tbody td,
 .table th {
-  padding: 20px;
+  padding: 10px;
   text-align: right;
   border-spacing: 0;
   overflow: hidden;
@@ -47,25 +48,21 @@ tbody tr:last-child td {
   }
 }
 
-tfoot td {
-  padding: 8px;
-  font-weight: bold;
-}
 .day {
   background-color: #374254;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 10px;
-  color: $color-text;
+  color: white;
 }
 .spend {
-  color: $color-text;
+  color: white;
 }
 .difference {
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 10px;
 }
 .remain {
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 10px;
 }
 .positive-total {

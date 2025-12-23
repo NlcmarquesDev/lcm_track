@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('months', function (Blueprint $table) {
+        Schema::create('daily_expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->integer('year');
-            $table->tinyInteger('month');
-            $table->decimal('monthly_budget', 10, 2);
-            $table->decimal('daily_budget', 10, 2);
-            $table->boolean('is_closed')->default(false);
-            $table->timestamp('closed_at')->nullable();
+            $table->foreignId('month_id')->constrained()->cascadeOnDelete();
+            $table->date('expense_date');
+            $table->decimal('amount', 10, 2);
+            $table->string('description')->nullable();
             $table->timestamps();
-            $table->unique(['user_id', 'year', 'month']);
+
+            $table->index(['user_id', 'expense_date']);
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('months');
+        Schema::dropIfExists('daily_expenses');
     }
 };

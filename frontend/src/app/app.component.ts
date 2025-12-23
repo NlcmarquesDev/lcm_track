@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
@@ -25,6 +26,7 @@ import { CardsRapportComponent } from './components/cards-rapport/cards-rapport.
     ModalRapportsComponent,
     ModalCloseMonthComponent,
     CardsRapportComponent,
+    HttpClientModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

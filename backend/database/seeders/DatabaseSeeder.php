@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Months;
+
 use App\Models\User;
+use App\Models\UserSettings;
+use App\Models\Months;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -22,21 +24,21 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('pass123'), // password fixa
         ]);
 
-        Months::factory()->count(4)->create([
-            'user_id' => $admin->id,
-        ]);
+        User::factory()
+        ->count(5)
+        ->create()
+        ->each(function ($user) {
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        $users = User::factory()->count(5)->create();
-
-
-        foreach ($users as $user) {
-            Months::factory()->count(3)->create([
+            UserSettings::factory()->create([
                 'user_id' => $user->id,
             ]);
-        }
+
+            Months::factory()
+                    //->withExpenses()
+                    ->create([
+                        'user_id' => $user->id,
+                    ]);
+        });
+
     }
 }
