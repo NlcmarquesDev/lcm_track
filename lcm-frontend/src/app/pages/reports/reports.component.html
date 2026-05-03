@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="page-content">
+    <div class="reports-header">
+      <span class="reports-title">Reports</span>
+      <span class="reports-count">{{ reports().length }} months</span>
+    </div>
+
+    @if (errorMsg()) {
+      <div class="error-msg">{{ errorMsg() }}</div>
+    }
+
+    @if (loading()) {
+      <div class="loading">Loading...</div>
+    } @else if (reports().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <p class="empty-text">No reports yet.<br />Close a month to see reports.</p>
+      </div>
+    } @else {
+      <div class="reports-list">
+        @for (report of reports(); track report.id) {
+          <div class="report-card">
+            <div class="report-header">
+              <span class="report-month">{{ getMonthName(report.month) }} {{ report.year }}</span>
+              <span class="report-status">Closed</span>
+            </div>
+            <div class="report-stats">
+              <div class="stat">
+                <span class="stat-value">€{{ report.total_spent | number:'1.2-2' }}</span>
+                <span class="stat-label">Spent</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">€{{ report.total_budget | number:'1.2-2' }}</span>
+                <span class="stat-label">Budget</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value" [class.text-success]="report.difference >= 0" [class.text-danger]="report.difference < 0">
+                  €{{ report.difference | number:'1.2-2' }}
+                </span>
+                <span class="stat-label">Diff</span>
+              </div>
+            </div>
+            <div class="report-progress">
+              <div
+                class="progress-fill"
+                [style.width.%]="Math.min(report.percentage, 100)"
+                [style.background]="getStatusColor(report.percentage)"
+              ></div>
+            </div>
+            <div class="report-percentage">{{ report.percentage | number:'1.1-1' }}% used</div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="container">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        Dashboard
+      </a>
+      <a routerLink="/daily" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📋</span>
+        Daily
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📈</span>
+        Reports
+      </a>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,113 @@
+<div class="auth-page">
+  <div class="auth-container fade-in">
+    <div class="auth-header">
+      <div class="auth-logo">💰</div>
+      <h1 class="auth-title">Daily Budget</h1>
+      <p class="auth-subtitle">Track your daily spending simply</p>
+    </div>
+
+    <div class="auth-toggle">
+      <button
+        class="toggle-btn"
+        [class.active]="isLogin()"
+        (click)="isLogin() ? null : toggleMode()"
+        type="button"
+      >Sign In</button>
+      <button
+        class="toggle-btn"
+        [class.active]="!isLogin()"
+        (click)="!isLogin() ? null : toggleMode()"
+        type="button"
+      >Sign Up</button>
+    </div>
+
+    @if (errorMsg()) {
+      <div class="error-msg">{{ errorMsg() }}</div>
+    }
+
+    @if (isLogin()) {
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form slide-up">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="loginForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span class="spinner"></span> Signing in...
+          } @else {
+            Sign In
+          }
+        </button>
+      </form>
+    } @else {
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form slide-up">
+        <div class="form-group">
+          <label for="reg-name">Name</label>
+          <input
+            id="reg-name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="Your name"
+            autocomplete="name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input
+            id="reg-email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input
+            id="reg-password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Min 8 characters"
+            autocomplete="new-password"
+          />
+        </div>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="registerForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span class="spinner"></span> Creating account...
+          } @else {
+            Create Account
+          }
+        </button>
+      </form>
+    }
+  </div>
+</div>

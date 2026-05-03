@@ -1,0 +1,209 @@
+<div class="page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container header-content">
+      <span class="page-title">Daily Budget</span>
+      <div class="header-user">
+        <span class="user-name">{{ authService.user()?.name }}</span>
+        <button class="btn btn-sm btn-secondary" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container page-content">
+    @if (loading()) {
+      <div class="skeleton-wrap">
+        <div class="skeleton" style="height: 160px; margin-bottom: 16px;"></div>
+        <div class="skeleton" style="height: 120px; margin-bottom: 16px;"></div>
+        <div class="skeleton" style="height: 120px;"></div>
+      </div>
+    } @else if (showCreateHousehold()) {
+      <!-- Create Household -->
+      <div class="create-household slide-up">
+        <div class="welcome-icon">🏠</div>
+        <h2 class="welcome-title">Welcome!</h2>
+        <p class="welcome-text">Create your household to start tracking your daily budget.</p>
+
+        @if (errorMsg()) {
+          <div class="error-msg">{{ errorMsg() }}</div>
+        }
+
+        <form [formGroup]="householdForm" (ngSubmit)="createHousehold()" class="household-form">
+          <div class="form-group">
+            <label for="hh-name">Household Name</label>
+            <input id="hh-name" type="text" class="form-control" formControlName="name" placeholder="My Family" />
+          </div>
+          <div class="form-group">
+            <label for="hh-budget">Daily Budget (€)</label>
+            <input id="hh-budget" type="number" class="form-control" formControlName="daily_budget" placeholder="100" inputmode="decimal" />
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="householdForm.invalid">
+            Create Household
+          </button>
+        </form>
+      </div>
+    } @else if (dashData()) {
+      <!-- Dashboard Content -->
+      @if (errorMsg()) {
+        <div class="error-msg">{{ errorMsg() }}</div>
+      }
+
+      <div class="household-badge fade-in">
+        <span class="hh-icon">🏠</span>
+        <span class="hh-name">{{ authService.currentHousehold()?.name }}</span>
+        <span class="hh-budget">€{{ authService.currentHousehold()?.daily_budget }}/day</span>
+      </div>
+
+      <!-- Members Section -->
+      <div class="card members-card slide-up" style="animation-delay: 0.05s;">
+        <div class="members-header">
+          <span class="stat-label">Members</span>
+          <button class="btn btn-sm btn-ghost" (click)="showInviteForm.set(!showInviteForm())">+ Add</button>
+        </div>
+        @if (showInviteForm()) {
+          <div class="invite-form">
+            @if (inviteMsg()) {
+              <div class="invite-msg">{{ inviteMsg() }}</div>
+            }
+            <div class="invite-input-wrap">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Email address"
+                [value]="inviteEmail()"
+                (input)="inviteEmail.set($any($event.target).value)"
+              />
+              <button class="btn btn-sm btn-primary" (click)="inviteUser()" [disabled]="inviteLoading()">
+                {{ inviteLoading() ? 'Sending...' : 'Send' }}
+              </button>
+            </div>
+          </div>
+        }
+        <div class="members-list">
+          @for (member of householdMembers(); track member.id) {
+            <div class="member-item">
+              <span class="member-avatar">{{ member.name.charAt(0).toUpperCase() }}</span>
+              <span class="member-name">{{ member.name }}</span>
+              <button class="btn-icon" (click)="confirmRemoveMember(member)" title="Remove member">×</button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Current Month Card -->
+      <div class="card stat-card slide-up" style="animation-delay: 0.1s;">
+        <div class="stat-header">
+          <span class="stat-label">Current Month</span>
+          <span class="stat-period">{{ getMonthName(dashData()!.current_month.month) }} {{ dashData()!.current_month.year }}</span>
+        </div>
+
+        <div class="big-number">
+          <span class="currency">€</span>{{ dashData()!.current_month.total_spent | number:'1.2-2' }}
+          <span class="big-label">spent</span>
+        </div>
+
+        <div class="progress-bar" style="margin: 16px 0;">
+          <div
+            class="progress-fill"
+            [style.width.%]="Math.min(dashData()!.current_month.percentage_used, 100)"
+            [style.background]="getPercentColor()"
+          ></div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-item">
+            <span class="stat-value">€{{ dashData()!.current_month.budget_so_far | number:'1.2-2' }}</span>
+            <span class="stat-sub">budget so far</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" [class.text-success]="dashData()!.current_month.remaining >= 0" [class.text-danger]="dashData()!.current_month.remaining < 0">
+              €{{ dashData()!.current_month.remaining | number:'1.2-2' }}
+            </span>
+            <span class="stat-sub">remaining</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ dashData()!.current_month.percentage_used | number:'1.1-1' }}%</span>
+            <span class="stat-sub">used</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Previous Month Card -->
+      @if (dashData()?.previous_month) {
+        <div class="card stat-card slide-up" style="animation-delay: 0.2s;">
+          <div class="stat-header">
+            <span class="stat-label">Previous Month</span>
+            <span class="stat-period">{{ getMonthName(dashData()!.previous_month.month) }} {{ dashData()!.previous_month.year }}</span>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-item">
+              <span class="stat-value">€{{ dashData()!.previous_month.total_spent | number:'1.2-2' }}</span>
+              <span class="stat-sub">spent</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">€{{ dashData()!.previous_month.total_budget | number:'1.2-2' }}</span>
+              <span class="stat-sub">budget</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" [class.text-success]="dashData()!.previous_month.difference >= 0" [class.text-danger]="dashData()!.previous_month.difference < 0">
+                €{{ dashData()!.previous_month.difference | number:'1.2-2' }}
+              </span>
+              <span class="stat-sub">difference</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Quick Actions -->
+      <div class="quick-actions slide-up" style="animation-delay: 0.3s;">
+        <a routerLink="/daily" class="action-card">
+          <span class="action-icon">📋</span>
+          <span class="action-label">Daily Table</span>
+          <span class="action-arrow">→</span>
+        </a>
+        <a routerLink="/reports" class="action-card">
+          <span class="action-icon">📊</span>
+          <span class="action-label">Reports</span>
+          <span class="action-arrow">→</span>
+        </a>
+      </div>
+    }
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="container">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        Dashboard
+      </a>
+      <a routerLink="/daily" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📋</span>
+        Daily
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📈</span>
+        Reports
+      </a>
+    </div>
+  </nav>
+</div>
+
+<!-- Remove Member Modal -->
+@if (showRemoveModal()) {
+  <div class="modal-overlay" (click)="cancelRemove()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-title">Remove Member</div>
+      <div class="modal-body">
+        Are you sure you want to remove <strong>{{ memberToRemove()?.name }}</strong> from this household?
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="cancelRemove()">Cancel</button>
+        <button class="btn btn-danger" (click)="removeMember()" [disabled]="removingMember()">
+          {{ removingMember() ? 'Removing...' : 'Remove' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

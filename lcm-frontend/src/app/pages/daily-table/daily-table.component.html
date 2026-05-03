@@ -1,0 +1,180 @@
+<div class="page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="container">
+      <span class="page-title">Daily Table</span>
+      <div class="month-nav">
+        <button class="nav-btn" (click)="navigateMonth(-1)">‹</button>
+        <span class="month-label">{{ getMonthName(currentMonth()) }} {{ currentYear() }}</span>
+        <button class="nav-btn" (click)="navigateMonth(1)">›</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container page-content">
+    @if (successMsg()) {
+      <div class="success-msg">{{ successMsg() }}</div>
+    }
+    @if (errorMsg()) {
+      <div class="error-msg">{{ errorMsg() }}</div>
+    }
+
+    <!-- Previous Month Summary -->
+    @if (prevSummary() && !prevLoading()) {
+      <div class="card prev-summary fade-in">
+        <div class="prev-header">
+          <span class="prev-label">Previous Month</span>
+          <span class="badge" [class.badge-success]="prevSummary().difference >= 0" [class.badge-danger]="prevSummary().difference < 0">
+            {{ prevSummary().difference >= 0 ? 'Under Budget' : 'Over Budget' }}
+          </span>
+        </div>
+        <div class="prev-stats">
+          <span>Spent: <strong>€{{ prevSummary().total_spent | number:'1.2-2' }}</strong></span>
+          <span>Budget: <strong>€{{ prevSummary().total_budget | number:'1.2-2' }}</strong></span>
+          <span [class.text-success]="prevSummary().difference >= 0" [class.text-danger]="prevSummary().difference < 0">
+            Diff: <strong>€{{ prevSummary().difference | number:'1.2-2' }}</strong>
+          </span>
+        </div>
+      </div>
+    }
+
+    <!-- Close Month Button -->
+    @if (!isClosed() && !loading()) {
+      <button class="btn btn-danger btn-sm close-month-btn" (click)="closeMonth()" [disabled]="closing()">
+        @if (closing()) {
+          <span class="spinner"></span> Closing...
+        } @else {
+          🔒 Close Month
+        }
+      </button>
+    }
+
+    @if (isClosed()) {
+      <div class="closed-badge">
+        <span>🔒</span> Month is closed — data is locked
+      </div>
+    }
+
+    <!-- Table -->
+    @if (loading()) {
+      <div class="skeleton-table">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+          <div class="skeleton" style="height: 50px; margin-bottom: 4px;"></div>
+        }
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="col-date">Date</span>
+          <span class="col-num">Spent</span>
+          <span class="col-num">Diff</span>
+          <span class="col-num">Balance</span>
+        </div>
+
+        <div class="table-body">
+          @for (entry of entries(); track entry.date) {
+            <div
+              class="table-row"
+              [class.today]="isToday(entry.date)"
+              [class.future]="isFuture(entry.date)"
+              [class.status-green]="entry.status === 'green' && !isFuture(entry.date)"
+              [class.status-red]="entry.status === 'red' && !isFuture(entry.date)"
+              (click)="!isClosed() && !isFuture(entry.date) ? prefillDate(entry.date) : null"
+            >
+              <span class="col-date">
+                <span class="day-num">{{ getDayNum(entry.date) }}</span>
+                <span class="day-name">{{ getDayOfWeek(entry.date) }}</span>
+              </span>
+              <span class="col-num">
+                @if (!isFuture(entry.date)) {
+                  €{{ entry.spent | number:'1.0-2' }}
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </span>
+              <span class="col-num" [class.text-success]="entry.difference >= 0 && !isFuture(entry.date)" [class.text-danger]="entry.difference < 0 && !isFuture(entry.date)">
+                @if (!isFuture(entry.date)) {
+                  {{ entry.difference >= 0 ? '+' : '' }}€{{ entry.difference | number:'1.0-2' }}
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </span>
+              <span class="col-num col-cumulative" [class.text-success]="entry.cumulative >= 0 && !isFuture(entry.date)" [class.text-danger]="entry.cumulative < 0 && !isFuture(entry.date)">
+                @if (!isFuture(entry.date)) {
+                  €{{ entry.cumulative | number:'1.0-2' }}
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Entry Form Overlay -->
+  @if (showEntryForm()) {
+    <div class="overlay" (click)="showEntryForm.set(false)">
+      <div class="entry-sheet slide-up" (click)="$event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <h3 class="sheet-title">Add Spending</h3>
+
+        <form [formGroup]="entryForm" (ngSubmit)="saveEntry()">
+          <div class="form-group">
+            <label for="entry-date">Date</label>
+            <input id="entry-date" type="date" class="form-control" formControlName="date" />
+          </div>
+          <div class="form-group">
+            <label for="entry-amount">Amount (€)</label>
+            <input
+              id="entry-amount"
+              type="number"
+              class="form-control amount-input"
+              formControlName="amount"
+              placeholder="0.00"
+              inputmode="decimal"
+              step="0.01"
+              autofocus
+            />
+          </div>
+          <div class="sheet-actions">
+            <button type="button" class="btn btn-secondary" (click)="showEntryForm.set(false)">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="entryForm.invalid || saving()">
+              @if (saving()) {
+                <span class="spinner"></span>
+              } @else {
+                Save
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- FAB -->
+  @if (!isClosed() && !loading()) {
+    <button class="fab" (click)="showEntryForm.set(true)" aria-label="Add entry">
+      +
+    </button>
+  }
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="container">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        Dashboard
+      </a>
+      <a routerLink="/daily" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📋</span>
+        Daily
+      </a>
+      <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📈</span>
+        Reports
+      </a>
+    </div>
+  </nav>
+</div>
