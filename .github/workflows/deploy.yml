@@ -71,11 +71,11 @@ jobs:
           fi
 
           echo "Building and starting containers..."
-          docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
+          docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml up --build -d --remove-orphans
 
           echo "Waiting for database to be ready..."
           for i in $(seq 1 30); do
-            if docker compose -f docker-compose.prod.yml exec -T db sh -lc 'mysqladmin ping -h localhost -uroot -p"$MYSQL_ROOT_PASSWORD" --silent' </dev/null >/dev/null 2>&1; then
+            if docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T db sh -lc 'mysqladmin ping -h localhost -uroot -p"$MYSQL_ROOT_PASSWORD" --silent' </dev/null >/dev/null 2>&1; then
               echo "Database is ready."
               break
             fi
@@ -87,11 +87,11 @@ jobs:
           done
 
           echo "Running migrations..."
-          docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force </dev/null
+          docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T backend php artisan migrate --force </dev/null
 
           echo "Clearing caches..."
-          docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache </dev/null
-          docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache </dev/null
+          docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T backend php artisan config:cache </dev/null
+          docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T backend php artisan route:cache </dev/null
 
           echo "Deploy done!!"
           ENDSSH
