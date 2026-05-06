@@ -20,25 +20,24 @@ jobs:
           sudo mv cloudflared /usr/local/bin/
 
       - name: Setup SSH key and config
+        env:
+          SSH_PRIVATE_KEY_B64: ${{ secrets.SSH_PRIVATE_KEY_B64 }}
         run: |
           mkdir -p ~/.ssh
-          env:
-            SSH_PRIVATE_KEY_B64: ${{ secrets.SSH_PRIVATE_KEY_B64 }}
-          run: |
-            if [ -z "$SSH_PRIVATE_KEY_B64" ]; then
-              echo "Missing secret: SSH_PRIVATE_KEY_B64"
-              exit 1
-            fi
-            printf '%s' "$SSH_PRIVATE_KEY_B64" | tr -d '\r\n' | base64 -d > ~/.ssh/id_ed25519
-            chmod 600 ~/.ssh/id_ed25519
-            ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
-            cat >> ~/.ssh/config << 'EOF'
-            Host ghaction-ssh.lcmarques.work
-              ProxyCommand cloudflared access ssh --hostname %h
-              StrictHostKeyChecking no
-              User lcm
-              IdentityFile ~/.ssh/id_ed25519
-            EOF
+          if [ -z "$SSH_PRIVATE_KEY_B64" ]; then
+            echo "Missing secret: SSH_PRIVATE_KEY_B64"
+            exit 1
+          fi
+          printf '%s' "$SSH_PRIVATE_KEY_B64" | tr -d '\r\n' | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
+          cat >> ~/.ssh/config << 'EOF'
+          Host ghaction-ssh.lcmarques.work
+            ProxyCommand cloudflared access ssh --hostname %h
+            StrictHostKeyChecking no
+            User lcm
+            IdentityFile ~/.ssh/id_ed25519
+          EOF
 
       - name: Deploy via SSH
         run: |
