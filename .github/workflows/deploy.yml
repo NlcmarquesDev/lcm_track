@@ -53,7 +53,10 @@ jobs:
           cd /home/lcm/sites/lcm-track/lcm_track
 
           echo "Pulling latest code..."
-          git pull origin main
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            git stash push --include-untracked -m "github-actions-deploy-$(date -u +%Y%m%dT%H%M%SZ)" || true
+          fi
+          git pull --ff-only origin main
 
           echo "Writing backend .env..."
           cat > lcm-backend/.env <<'BACKEND_ENV_EOF'
