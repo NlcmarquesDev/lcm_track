@@ -63,24 +63,19 @@ jobs:
           ${{ secrets.BACKEND_ENV }}
           BACKEND_ENV_EOF
 
-          echo "Checking port 8002..."
-          PORT_8002_CONTAINERS=$(docker ps --format '{{.ID}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:8002->/ {print $1}')
-          if [ -n "$PORT_8002_CONTAINERS" ]; then
-            echo "Stopping container(s) using port 8002: $PORT_8002_CONTAINERS"
-            docker stop $PORT_8002_CONTAINERS || true
-            docker rm $PORT_8002_CONTAINERS || true
-          else
-            echo "Port 8002 is free."
+          echo "Preparing project containers..."
+          docker rm -f lcm_track-frontend-1 lcm_track-adminer-1 || true
+
+          OTHER_8002=$(docker ps --format '{{.Names}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:8002->/ && $1 != "lcm_track-frontend-1" {print $1}')
+          if [ -n "$OTHER_8002" ]; then
+            echo "Port 8002 is in use by another container: $OTHER_8002"
+            exit 1
           fi
 
-          echo "Checking port 8090..."
-          PORT_8090_CONTAINERS=$(docker ps --format '{{.ID}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:8090->/ {print $1}')
-          if [ -n "$PORT_8090_CONTAINERS" ]; then
-            echo "Stopping container(s) using port 8090: $PORT_8090_CONTAINERS"
-            docker stop $PORT_8090_CONTAINERS || true
-            docker rm $PORT_8090_CONTAINERS || true
-          else
-            echo "Port 8090 is free."
+          OTHER_8090=$(docker ps --format '{{.Names}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:8090->/ && $1 != "lcm_track-adminer-1" {print $1}')
+          if [ -n "$OTHER_8090" ]; then
+            echo "Port 8090 is in use by another container: $OTHER_8090"
+            exit 1
           fi
 
           echo "Building and starting containers..."
