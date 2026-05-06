@@ -1,0 +1,44 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/lcm/sites/lcm-track/lcm_track
+
+            echo "Pulling latest code..."
+            git pull origin main
+
+            echo "Writing backend .env..."
+            cat > lcm-backend/.env << 'EOF'
+            ${{ secrets.BACKEND_ENV }}
+            EOF
+
+            echo "Building and starting containers..."
+            docker compose -f docker-compose.prod.yml up --build -d
+
+            echo "Running migrations..."
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
+
+            echo "Clearing caches..."
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache
+            docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
+
+            echo "Deploy done!"
