@@ -59,6 +59,16 @@ jobs:
           ${{ secrets.BACKEND_ENV }}
           BACKEND_ENV_EOF
 
+          echo "Checking port 8002..."
+          PORT_8002_CONTAINERS=$(docker ps --format '{{.ID}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:8002->/ {print $1}')
+          if [ -n "$PORT_8002_CONTAINERS" ]; then
+            echo "Stopping container(s) using port 8002: $PORT_8002_CONTAINERS"
+            docker stop $PORT_8002_CONTAINERS || true
+            docker rm $PORT_8002_CONTAINERS || true
+          else
+            echo "Port 8002 is free."
+          fi
+
           echo "Building and starting containers..."
           docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
 
