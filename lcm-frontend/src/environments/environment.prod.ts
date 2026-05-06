@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://financas.lcmarques.work/api'
+  apiUrl: 'https://api-financas.lcmarques.work/api'
 };
