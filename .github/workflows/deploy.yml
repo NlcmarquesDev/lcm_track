@@ -46,8 +46,9 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh lcm@ghaction-ssh.lcmarques.work <<'ENDSSH'
+          ssh -T lcm@ghaction-ssh.lcmarques.work 'bash -se' <<'ENDSSH'
           set -euo pipefail
+          set -x
 
           cd /home/lcm/sites/lcm-track/lcm_track
 
