@@ -22,13 +22,17 @@ jobs:
       - name: Setup SSH key and config
         env:
           SSH_PRIVATE_KEY_B64: ${{ secrets.SSH_PRIVATE_KEY_B64 }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
-          if [ -z "$SSH_PRIVATE_KEY_B64" ]; then
-            echo "Missing secret: SSH_PRIVATE_KEY_B64"
+          if [ -n "$SSH_PRIVATE_KEY_B64" ]; then
+            printf '%s' "$SSH_PRIVATE_KEY_B64" | tr -d '\r\n' | base64 -d > ~/.ssh/id_ed25519
+          elif [ -n "$SSH_PRIVATE_KEY" ]; then
+            printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+          else
+            echo "Missing secret: set SSH_PRIVATE_KEY_B64 or SSH_PRIVATE_KEY"
             exit 1
           fi
-          printf '%s' "$SSH_PRIVATE_KEY_B64" | tr -d '\r\n' | base64 -d > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
           cat >> ~/.ssh/config << 'EOF'
