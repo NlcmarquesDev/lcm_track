@@ -86,6 +86,9 @@ jobs:
             sleep 3
           done
 
+          echo "Syncing database user and grants..."
+          docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T db sh -lc 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --protocol=TCP --execute="CREATE DATABASE IF NOT EXISTS \`$DB_DATABASE\`; CREATE USER IF NOT EXISTS '\''$DB_USERNAME'\''@'\''%'\'' IDENTIFIED BY '\''$DB_PASSWORD'\''; ALTER USER '\''$DB_USERNAME'\''@'\''%'\'' IDENTIFIED BY '\''$DB_PASSWORD'\''; GRANT ALL PRIVILEGES ON \`$DB_DATABASE\`.* TO '\''$DB_USERNAME'\''@'\''%'\''; FLUSH PRIVILEGES;"' </dev/null
+
           echo "Running migrations..."
           docker compose --env-file lcm-backend/.env -f docker-compose.prod.yml exec -T backend php artisan migrate --force </dev/null
 
