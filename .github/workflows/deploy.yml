@@ -62,5 +62,5 @@ jobs:
             docker compose -f docker-compose.prod.yml exec -T backend php artisan config:cache
             docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
 
-            echo "Deploy done!"
+            echo "Deploy done!!"
           ENDSSH
