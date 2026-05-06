@@ -13,23 +13,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+
+      - name: Setup SSH key and config
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat >> ~/.ssh/config << 'EOF'
+          Host ghaction-ssh.lcmarques.work
+            ProxyCommand cloudflared access ssh --hostname %h
+            StrictHostKeyChecking no
+            User lcm
+            IdentityFile ~/.ssh/id_ed25519
+          EOF
+
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
+        run: |
+          ssh lcm@ghaction-ssh.lcmarques.work << 'ENDSSH'
             cd /home/lcm/sites/lcm-track/lcm_track
 
             echo "Pulling latest code..."
             git pull origin main
-
-            echo "Writing backend .env..."
-            cat > lcm-backend/.env << 'EOF'
-            ${{ secrets.BACKEND_ENV }}
-            EOF
 
             echo "Building and starting containers..."
             docker compose -f docker-compose.prod.yml up --build -d
@@ -42,3 +51,4 @@ jobs:
             docker compose -f docker-compose.prod.yml exec -T backend php artisan route:cache
 
             echo "Deploy done!"
+          ENDSSH
