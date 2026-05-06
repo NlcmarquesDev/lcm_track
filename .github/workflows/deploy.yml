@@ -47,6 +47,8 @@ jobs:
       - name: Deploy via SSH
         run: |
           ssh lcm@ghaction-ssh.lcmarques.work <<'ENDSSH'
+          set -euo pipefail
+
           cd /home/lcm/sites/lcm-track/lcm_track
 
           echo "Pulling latest code..."
@@ -59,6 +61,19 @@ jobs:
 
           echo "Building and starting containers..."
           docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
+
+          echo "Waiting for database to be ready..."
+          for i in $(seq 1 30); do
+            if docker compose -f docker-compose.prod.yml exec -T db sh -lc 'mysqladmin ping -h localhost -uroot -p"$MYSQL_ROOT_PASSWORD" --silent' >/dev/null 2>&1; then
+              echo "Database is ready."
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "Database did not become ready in time."
+              exit 1
+            fi
+            sleep 3
+          done
 
           echo "Running migrations..."
           docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
