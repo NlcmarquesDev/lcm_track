@@ -54,8 +54,8 @@ jobs:
 
           echo "Writing backend .env..."
           cat > lcm-backend/.env <<'BACKEND_ENV_EOF'
-${{ secrets.BACKEND_ENV }}
-BACKEND_ENV_EOF
+          ${{ secrets.BACKEND_ENV }}
+          BACKEND_ENV_EOF
 
           echo "Building and starting containers..."
           docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
