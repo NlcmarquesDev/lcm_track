@@ -5,7 +5,7 @@ services:
       args:
         BUILD_CONFIGURATION: production
     ports:
-      - "8080:80"
+      - "8002:80"
     restart: unless-stopped
     depends_on:
       - backend
@@ -13,7 +13,7 @@ services:
   backend:
     build: ./lcm-backend
     ports:
-      - "8000:80"
+      - "8003:80"
     restart: unless-stopped
     env_file:
       - ./lcm-backend/.env
@@ -23,11 +23,13 @@ services:
   db:
     image: mysql:8
     restart: unless-stopped
+    env_file:
+      - ./lcm-backend/.env
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE:-lcm}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-lcm_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
     volumes:
       - db_data:/var/lib/mysql
 

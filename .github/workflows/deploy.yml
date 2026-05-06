@@ -52,8 +52,13 @@ jobs:
             echo "Pulling latest code..."
             git pull origin main
 
+            echo "Writing backend .env..."
+            cat > lcm-backend/.env << 'EOF'
+            ${{ secrets.BACKEND_ENV }}
+            EOF
+
             echo "Building and starting containers..."
-            docker compose -f docker-compose.prod.yml up --build -d
+            docker compose -f docker-compose.prod.yml up --build -d --remove-orphans
 
             echo "Running migrations..."
             docker compose -f docker-compose.prod.yml exec -T backend php artisan migrate --force
