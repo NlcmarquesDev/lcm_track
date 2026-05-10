@@ -64,6 +64,11 @@
   border-radius: 20px;
 }
 
+.hh-edit {
+  width: auto;
+  padding: 4px 10px;
+}
+
 /* Stat card */
 .stat-card {
   margin-bottom: 16px;
@@ -331,6 +336,12 @@
 
 .modal-body strong {
   color: var(--text);
+}
+
+.budget-preview {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
 .modal-actions {

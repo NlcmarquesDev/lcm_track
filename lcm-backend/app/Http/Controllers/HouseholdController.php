@@ -46,6 +46,23 @@ class HouseholdController extends Controller
         return response()->json($household);
     }
 
+    public function update(Request $request, Household $household)
+    {
+        $userHousehold = $request->user()->households()->where('household_id', $household->id)->first();
+        if (!$userHousehold || $userHousehold->pivot->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'daily_budget' => 'sometimes|numeric|min:0.01',
+        ]);
+
+        $household->update($validated);
+
+        return response()->json($household->fresh());
+    }
+
     public function invite(Request $request, Household $household)
     {
         $request->validate([

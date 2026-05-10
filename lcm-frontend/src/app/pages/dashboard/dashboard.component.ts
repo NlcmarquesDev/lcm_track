@@ -25,10 +25,24 @@ export class DashboardComponent implements OnInit {
   inviteMsg = signal('');
   householdMembers = signal<User[]>([]);
   showRemoveModal = signal(false);
+  showBudgetModal = signal(false);
+  savingBudget = signal(false);
   memberToRemove = signal<User | null>(null);
   removingMember = signal(false);
   householdForm: FormGroup;
+  budgetForm: FormGroup;
   hasHousehold = computed(() => !!this.authService.currentHousehold());
+  isCurrentUserAdmin = computed(() => {
+    const user = this.authService.user();
+    const currentHousehold = this.authService.currentHousehold();
+
+    if (!user || !currentHousehold || !user.households?.length) {
+      return false;
+    }
+
+    const household = user.households.find((h) => h.id === currentHousehold.id);
+    return household?.pivot?.role === 'admin';
+  });
 
   constructor(
     public authService: AuthService,
@@ -39,6 +53,10 @@ export class DashboardComponent implements OnInit {
     this.householdForm = this.fb.group({
       name: ['', Validators.required],
       daily_budget: ['', [Validators.required, Validators.min(1)]],
+    });
+
+    this.budgetForm = this.fb.group({
+      monthly_budget: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -149,6 +167,63 @@ export class DashboardComponent implements OnInit {
         this.loadDashboard();
       },
       error: () => this.errorMsg.set('Failed to create household'),
+    });
+  }
+
+  openBudgetModal() {
+    if (!this.isCurrentUserAdmin()) {
+      this.errorMsg.set('Only household admins can update the budget');
+      return;
+    }
+
+    const dailyBudget = this.authService.currentHousehold()?.daily_budget ?? this.dashData()?.current_month?.daily_budget;
+    const monthlyBudget = dailyBudget ? dailyBudget * this.daysInCurrentMonth() : null;
+    this.budgetForm.patchValue({
+      monthly_budget: monthlyBudget ? Math.round(monthlyBudget * 100) / 100 : '',
+    });
+    this.showBudgetModal.set(true);
+  }
+
+  closeBudgetModal() {
+    this.showBudgetModal.set(false);
+    this.savingBudget.set(false);
+  }
+
+  daysInCurrentMonth(): number {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  }
+
+  calculateMonthlyBudget(): number {
+    const daily = Number(this.budgetForm.get('monthly_budget')?.value || 0);
+    if (!daily) return 0;
+    return daily * this.daysInCurrentMonth();
+  }
+
+  saveBudget() {
+    if (this.budgetForm.invalid) return;
+
+    if (!this.isCurrentUserAdmin()) {
+      this.errorMsg.set('Only household admins can update the budget');
+      return;
+    }
+
+    const household = this.authService.currentHousehold();
+    if (!household) return;
+
+    const daily = Number(this.budgetForm.get('monthly_budget')?.value || 0);
+    this.savingBudget.set(true);
+    this.apiService.updateHouseholdBudget(household.id, daily).subscribe({
+      next: (updatedHousehold) => {
+        this.authService.setCurrentHousehold(updatedHousehold);
+        this.savingBudget.set(false);
+        this.showBudgetModal.set(false);
+        this.loadDashboard();
+      },
+      error: (err) => {
+        this.savingBudget.set(false);
+        this.errorMsg.set(err.error?.message || 'Failed to update household budget');
+      },
     });
   }
 

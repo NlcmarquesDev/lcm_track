@@ -29,6 +29,12 @@ export class ApiService {
     });
   }
 
+  updateHouseholdBudget(householdId: number, dailyBudget: number): Observable<Household> {
+    return this.http.patch<Household>(`${this.apiUrl}/households/${householdId}`, {
+      daily_budget: dailyBudget,
+    });
+  }
+
   inviteToHousehold(householdId: number, email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/households/${householdId}/invite`, { email });
   }
