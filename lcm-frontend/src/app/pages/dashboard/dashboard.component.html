@@ -2,7 +2,7 @@
   <!-- Header -->
   <header class="page-header">
     <div class="container header-content">
-      <span class="page-title">Daily Budget</span>
+      <span class="page-title">Daily Budget LCM</span>
       <div class="header-user">
         <span class="user-name">{{ authService.user()?.name }}</span>
         <button class="btn btn-sm btn-secondary" (click)="logout()">Logout</button>
@@ -52,15 +52,20 @@
         <span class="hh-icon">🏠</span>
         <span class="hh-name">{{ authService.currentHousehold()?.name }}</span>
         <span class="hh-budget">€{{ authService.currentHousehold()?.daily_budget }}/day</span>
+        @if (isCurrentUserAdmin()) {
+          <button class="btn btn-sm btn-ghost hh-edit" (click)="openBudgetModal()">Edit</button>
+        }
       </div>
 
       <!-- Members Section -->
       <div class="card members-card slide-up" style="animation-delay: 0.05s;">
         <div class="members-header">
           <span class="stat-label">Members</span>
-          <button class="btn btn-sm btn-ghost" (click)="showInviteForm.set(!showInviteForm())">+ Add</button>
+          @if (isCurrentUserAdmin()) {
+            <button class="btn btn-sm btn-ghost" (click)="showInviteForm.set(!showInviteForm())">+ Add</button>
+          }
         </div>
-        @if (showInviteForm()) {
+        @if (showInviteForm() && isCurrentUserAdmin()) {
           <div class="invite-form">
             @if (inviteMsg()) {
               <div class="invite-msg">{{ inviteMsg() }}</div>
@@ -84,7 +89,9 @@
             <div class="member-item">
               <span class="member-avatar">{{ member.name.charAt(0).toUpperCase() }}</span>
               <span class="member-name">{{ member.name }}</span>
-              <button class="btn-icon" (click)="confirmRemoveMember(member)" title="Remove member">×</button>
+              @if (isCurrentUserAdmin()) {
+                <button class="btn-icon" (click)="confirmRemoveMember(member)" title="Remove member">×</button>
+              }
             </div>
           }
         </div>
@@ -202,6 +209,38 @@
         <button class="btn btn-secondary" (click)="cancelRemove()">Cancel</button>
         <button class="btn btn-danger" (click)="removeMember()" [disabled]="removingMember()">
           {{ removingMember() ? 'Removing...' : 'Remove' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (showBudgetModal()) {
+  <div class="modal-overlay" (click)="closeBudgetModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-title">Update Budget</div>
+      <div class="modal-body">
+        <form [formGroup]="budgetForm" class="household-form">
+          <div class="form-group">
+            <label for="monthly-budget">Daily Budget (€)</label>
+            <input
+              id="monthly-budget"
+              type="number"
+              class="form-control"
+              formControlName="monthly_budget"
+              placeholder="0.00"
+              inputmode="decimal"
+            />
+          </div>
+        </form>
+        <div class="budget-preview">
+          Monthly Budget: <strong>€{{ calculateMonthlyBudget() | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="closeBudgetModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveBudget()" [disabled]="budgetForm.invalid || savingBudget()">
+          {{ savingBudget() ? 'Saving...' : 'Save' }}
         </button>
       </div>
     </div>

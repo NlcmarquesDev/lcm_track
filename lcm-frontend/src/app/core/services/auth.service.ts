@@ -57,9 +57,21 @@ export class AuthService {
       tap(user => {
         this._user.set(user);
         localStorage.setItem('user', JSON.stringify(user));
-        if (user.households && user.households.length > 0 && !this._currentHousehold()) {
-          this.setCurrentHousehold(user.households[0]);
+        const households = user.households ?? [];
+        const current = this._currentHousehold();
+
+        if (!households.length) {
+          this._currentHousehold.set(null);
+          localStorage.removeItem('currentHousehold');
+          return;
         }
+
+        // Keep selected household only if it still belongs to the user in this environment.
+        if (current && households.some(h => h.id === current.id)) {
+          return;
+        }
+
+        this.setCurrentHousehold(households[0]);
       })
     );
   }
