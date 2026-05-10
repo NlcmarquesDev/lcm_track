@@ -178,9 +178,10 @@ export class DashboardComponent implements OnInit {
 
     const dailyBudget = this.authService.currentHousehold()?.daily_budget ?? this.dashData()?.current_month?.daily_budget;
     const monthlyBudget = dailyBudget ? dailyBudget * this.daysInCurrentMonth() : null;
-    this.budgetForm.patchValue({
-      monthly_budget: monthlyBudget ? Math.round(monthlyBudget * 100) / 100 : '',
-    });
+
+   
+  
+      this.budgetForm.get('monthly_budget')?.setValue(dailyBudget);
     this.showBudgetModal.set(true);
   }
 
