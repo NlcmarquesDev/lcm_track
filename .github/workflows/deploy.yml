@@ -45,32 +45,29 @@ jobs:
           EOF
 
       - name: Deploy via SSH
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -T lcm@ghaction-ssh.lcmarques.work 'bash -se' <<'ENDSSH'
+          if [ -z "${DEPLOY_PATH:-}" ]; then
+            echo "Missing secret: DEPLOY_PATH"
+            exit 1
+          fi
+
+          ssh -T lcm@ghaction-ssh.lcmarques.work bash -se -- "$DEPLOY_PATH" <<'ENDSSH'
           set -euo pipefail
           set -x
 
-          DEPLOY_ROOT=""
-          for search_root in /home/lcm/sites /home/lcm /var/www /srv /opt; do
-            [ -d "$search_root" ] || continue
-            while IFS= read -r candidate; do
-              if [ -f "$candidate/docker-compose.prod.yml" ] && [ -d "$candidate/lcm-backend" ]; then
-                DEPLOY_ROOT="$candidate"
-                break 2
-              fi
-            done < <(find "$search_root" -maxdepth 5 -type f -name docker-compose.prod.yml 2>/dev/null | sed 's#/docker-compose.prod.yml$##' | sort)
-          done
-
-          if [ -z "$DEPLOY_ROOT" ]; then
-            echo "Deploy directory not found in common locations."
-            for search_root in /home/lcm/sites /home/lcm /var/www /srv /opt; do
-              [ -d "$search_root" ] || continue
-              find "$search_root" -maxdepth 5 -type f -name docker-compose.prod.yml 2>/dev/null || true
-            done
+          DEPLOY_ROOT="$1"
+          if [ ! -d "$DEPLOY_ROOT" ]; then
+            echo "Deploy directory does not exist: $DEPLOY_ROOT"
             exit 1
           fi
 
           cd "$DEPLOY_ROOT"
+          if [ ! -f "docker-compose.prod.yml" ] || [ ! -d "lcm-backend" ]; then
+            echo "Invalid deploy directory: expected docker-compose.prod.yml and lcm-backend/ in $DEPLOY_ROOT"
+            exit 1
+          fi
 
           echo "Pulling latest code..."
           if ! git diff --quiet || ! git diff --cached --quiet; then
