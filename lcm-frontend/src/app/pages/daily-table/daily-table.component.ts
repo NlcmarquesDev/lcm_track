@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
-import { DailyEntry, MonthlySummary } from '../../core/models';
+import { CurrentMonthStats, DailyEntry } from '../../core/models';
 
 @Component({
   selector: 'app-daily-table',
@@ -25,6 +25,8 @@ export class DailyTableComponent implements OnInit {
 
   currentMonth = signal(new Date().getMonth() + 1);
   currentYear = signal(new Date().getFullYear());
+  currentSummary = signal<CurrentMonthStats | null>(null);
+  currentLoading = signal(false);
 
   entryForm: FormGroup;
 
@@ -50,6 +52,7 @@ export class DailyTableComponent implements OnInit {
   ngOnInit() {
     this.loadEntries();
     this.loadPrevMonth();
+    this.loadCurrentSummary();
   }
 
   loadEntries() {
@@ -109,12 +112,33 @@ export class DailyTableComponent implements OnInit {
         setTimeout(() => this.successMsg.set(''), 2000);
         this.entryForm.patchValue({ amount: '' });
         this.loadEntries();
+        this.loadCurrentSummary();
       },
       error: (err) => {
         this.saving.set(false);
         this.errorMsg.set(err.error?.message || 'Failed to save entry');
       },
     });
+  }
+
+  loadCurrentSummary() {
+    //update the current month data in the dashboard
+    const hh = this.authService.currentHousehold();
+    if (!hh) return;
+
+    this.currentLoading.set(true);
+    this.apiService.getDashboard(hh.id).subscribe({
+      next: (data) => {
+        console.log('Dashboard data:', data);
+        this.currentSummary.set(data.current_month);
+        this.currentLoading.set(false);
+      },
+      error: () => this.currentLoading.set(false),
+    });
+  }
+
+  getRemainingBudget(): number {
+    return (this.currentSummary()?.total_budget ?? 0) - (this.currentSummary()?.total_spent ?? 0);
   }
 
   closeMonth() {

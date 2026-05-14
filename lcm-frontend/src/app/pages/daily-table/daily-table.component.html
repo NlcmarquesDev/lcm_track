@@ -21,14 +21,14 @@
 
     <!-- Previous Month Summary -->
     @if (prevSummary() && !prevLoading()) {
-      <div class="card prev-summary fade-in">
-        <div class="prev-header">
-          <span class="prev-label">Previous Month</span>
+      <div class="card summary fade-in">
+        <div class="header">
+          <span class="label">Previous Month</span>
           <span class="badge" [class.badge-success]="prevSummary().difference >= 0" [class.badge-danger]="prevSummary().difference < 0">
             {{ prevSummary().difference >= 0 ? 'Under Budget' : 'Over Budget' }}
           </span>
         </div>
-        <div class="prev-stats">
+        <div class="stats">
           <span>Spent: <strong>€{{ prevSummary().total_spent | number:'1.2-2' }}</strong></span>
           <span>Budget: <strong>€{{ prevSummary().total_budget | number:'1.2-2' }}</strong></span>
           <span [class.text-success]="prevSummary().difference >= 0" [class.text-danger]="prevSummary().difference < 0">
@@ -37,6 +37,24 @@
         </div>
       </div>
     }
+      <!-- Current Month Summary -->
+      @if (currentSummary() && !currentLoading()) {
+        <div class="card summary fade-in">
+          <div class="header">
+            <span class="label">Current Month</span>
+             <span class="badge" [class.badge-success]="getRemainingBudget() >= 0" [class.badge-danger]="getRemainingBudget() < 0">
+              {{ getRemainingBudget() >= 0 ? 'Under Budget' : 'Over Budget' }}
+            </span>
+          </div>
+          <div class="stats">
+            <span>Spent: <strong>€{{ currentSummary()?.total_spent | number:'1.2-2' }}</strong></span>
+            <span>Budget: <strong>€{{ currentSummary()?.total_budget | number:'1.2-2' }}</strong></span>
+            <span [class.text-success]="getRemainingBudget() >= 0" [class.text-danger]="getRemainingBudget() < 0">
+              Diff: <strong>€{{ getRemainingBudget() | number:'1.2-2' }}</strong>
+            </span>
+          </div> 
+        </div>
+      }
 
     <!-- Close Month Button -->
     @if (!isClosed() && !loading()) {

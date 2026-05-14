@@ -38,19 +38,19 @@
 }
 
 /* Previous month summary */
-.prev-summary {
+.summary {
   margin-bottom: 12px;
   padding: 14px 16px;
 }
 
-.prev-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.prev-label {
+.label {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
@@ -58,14 +58,14 @@
   letter-spacing: 0.5px;
 }
 
-.prev-stats {
+.stats {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
   color: var(--text-secondary);
 }
 
-.prev-stats strong {
+.stats strong {
   color: var(--text);
 }
 
