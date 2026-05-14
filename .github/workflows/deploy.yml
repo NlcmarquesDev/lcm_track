@@ -50,7 +50,21 @@ jobs:
           set -euo pipefail
           set -x
 
-          cd /home/lcm/sites/lcm-track/lcm_track
+          DEPLOY_ROOT=""
+          while IFS= read -r candidate; do
+            if [ -f "$candidate/docker-compose.prod.yml" ] && [ -d "$candidate/lcm-backend" ]; then
+              DEPLOY_ROOT="$candidate"
+              break
+            fi
+          done < <(find /home/lcm/sites -maxdepth 4 -type f -name docker-compose.prod.yml 2>/dev/null | sed 's#/docker-compose.prod.yml$##' | sort)
+
+          if [ -z "$DEPLOY_ROOT" ]; then
+            echo "Deploy directory not found under /home/lcm/sites."
+            find /home/lcm/sites -maxdepth 4 -type f -name docker-compose.prod.yml 2>/dev/null || true
+            exit 1
+          fi
+
+          cd "$DEPLOY_ROOT"
 
           echo "Pulling latest code..."
           if ! git diff --quiet || ! git diff --cached --quiet; then
