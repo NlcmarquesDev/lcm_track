@@ -51,16 +51,22 @@ jobs:
           set -x
 
           DEPLOY_ROOT=""
-          while IFS= read -r candidate; do
-            if [ -f "$candidate/docker-compose.prod.yml" ] && [ -d "$candidate/lcm-backend" ]; then
-              DEPLOY_ROOT="$candidate"
-              break
-            fi
-          done < <(find /home/lcm/sites -maxdepth 4 -type f -name docker-compose.prod.yml 2>/dev/null | sed 's#/docker-compose.prod.yml$##' | sort)
+          for search_root in /home/lcm/sites /home/lcm /var/www /srv /opt; do
+            [ -d "$search_root" ] || continue
+            while IFS= read -r candidate; do
+              if [ -f "$candidate/docker-compose.prod.yml" ] && [ -d "$candidate/lcm-backend" ]; then
+                DEPLOY_ROOT="$candidate"
+                break 2
+              fi
+            done < <(find "$search_root" -maxdepth 5 -type f -name docker-compose.prod.yml 2>/dev/null | sed 's#/docker-compose.prod.yml$##' | sort)
+          done
 
           if [ -z "$DEPLOY_ROOT" ]; then
-            echo "Deploy directory not found under /home/lcm/sites."
-            find /home/lcm/sites -maxdepth 4 -type f -name docker-compose.prod.yml 2>/dev/null || true
+            echo "Deploy directory not found in common locations."
+            for search_root in /home/lcm/sites /home/lcm /var/www /srv /opt; do
+              [ -d "$search_root" ] || continue
+              find "$search_root" -maxdepth 5 -type f -name docker-compose.prod.yml 2>/dev/null || true
+            done
             exit 1
           fi
 

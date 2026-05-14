@@ -16,6 +16,8 @@ Services:
 
 This stack uses the MySQL container in Docker. You do not need MAMP for the database.
 
+Production deploy is handled by GitHub Actions on pushes to `main`.
+
 If this is your first run, execute migrations:
 
 ```bash
